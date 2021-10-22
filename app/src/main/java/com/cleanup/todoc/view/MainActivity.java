@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.utils.DeleteTaskListener;
 import com.cleanup.todoc.utils.SortMethod;
 import com.cleanup.todoc.utils.TasksAdapter;
 import com.cleanup.todoc.model.Project;
@@ -37,7 +38,7 @@ import java.util.Objects;
  *
  * @author Gaëtan HERFRAY
  */
-public class MainActivity extends AppCompatActivity implements TasksAdapter.DeleteTaskListener {
+public class MainActivity extends AppCompatActivity implements DeleteTaskListener {
 
     private MainViewModel viewModel;
 
