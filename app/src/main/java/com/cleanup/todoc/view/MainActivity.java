@@ -1,5 +1,6 @@
 package com.cleanup.todoc.view;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -130,23 +131,30 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.filter_alphabetical) {
-            sortMethod = SortMethod.ALPHABETICAL;
-        } else if (id == R.id.filter_alphabetical_inverted) {
-            sortMethod = SortMethod.ALPHABETICAL_INVERTED;
-        } else if (id == R.id.filter_oldest_first) {
-            sortMethod = SortMethod.OLD_FIRST;
-        } else if (id == R.id.filter_recent_first) {
-            sortMethod = SortMethod.RECENT_FIRST;
+        switch (item.getItemId()) {
+            case R.id.filter_alphabetical:
+                sortMethod = SortMethod.ALPHABETICAL;
+                updateTasks();
+                return true;
+            case R.id.filter_alphabetical_inverted:
+                sortMethod = SortMethod.ALPHABETICAL_INVERTED;
+                updateTasks();
+                return true;
+            case R.id.filter_oldest_first:
+                sortMethod = SortMethod.OLD_FIRST;
+                updateTasks();
+                return true;
+            case R.id.filter_recent_first:
+                sortMethod = SortMethod.RECENT_FIRST;
+                updateTasks();
+                return true;
+            default:
+                updateTasks();
+                return super.onOptionsItemSelected(item);
         }
-
-        updateTasks();
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
