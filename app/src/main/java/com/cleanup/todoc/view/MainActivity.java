@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -198,7 +197,8 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
                         new Date().getTime()
                 );
 
-                addTask(task);
+                viewModel.addTask(task);
+                updateTasks();
                 dialogInterface.dismiss();
             }
             // If name has been set, but project has not been set (this should never occur)
@@ -224,16 +224,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         dialogSpinner = dialog.findViewById(R.id.project_spinner);
 
         populateDialogSpinner();
-    }
-
-    /**
-     * Adds the given task to the list of created tasks.
-     *
-     * @param task the task to be added to the list
-     */
-    private void addTask(@NonNull Task task) {
-        viewModel.addTask(task);
-        updateTasks();
     }
 
     /**
