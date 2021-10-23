@@ -42,7 +42,7 @@ public class MainViewModel extends ViewModel {
         if (Objects.requireNonNull(tasksMLD.getValue()).size() == 0) {
             rvState = new MutableLiveData<>();
             rvState.setValue(View.GONE);
-        }else{
+        } else {
             rvState = new MutableLiveData<>();
             rvState.setValue(View.VISIBLE);
         }
@@ -55,7 +55,7 @@ public class MainViewModel extends ViewModel {
         if (Objects.requireNonNull(tasksMLD.getValue()).size() == 0) {
             tvState = new MutableLiveData<>();
             tvState.setValue(View.VISIBLE);
-        }else{
+        } else {
             tvState = new MutableLiveData<>();
             tvState.setValue(View.GONE);
         }
