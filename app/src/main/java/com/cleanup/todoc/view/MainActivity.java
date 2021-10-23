@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +32,7 @@ import com.cleanup.todoc.viewmodel.MainViewModel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      * List of all current tasks of the application
      */
     @NonNull
-    private final ArrayList<Task> tasks = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
 
     /**
      * The adapter which handles the list of tasks
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
         // ViewModel initialization
@@ -116,8 +117,11 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         adapter = new TasksAdapter(Objects.requireNonNull(viewModel.getTasksLiveData().getValue()), this);
 
         // Observe tasks
-        viewModel.getTasksLiveData().observe(this, tasks -> {
-            adapter.updateTasks(tasks);
+        viewModel.getTasksLiveData().observe(this, list -> {
+            // update main list with list observed
+            tasks = list;
+            // UI update
+            adapter.updateTasks(list);
             listTasks.setAdapter(adapter);
         });
 
@@ -159,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
     @Override
     public void onDeleteTask(Task task) {
-        tasks.remove(task);
+        viewModel.deleteTask(task);
         updateTasks();
     }
 
@@ -173,13 +177,11 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         if (dialogEditText != null && dialogSpinner != null) {
             // Get the name of the task
             String taskName = dialogEditText.getText().toString();
-
             // Get the selected project to be associated to the task
             Project taskProject = null;
             if (dialogSpinner.getSelectedItem() instanceof Project) {
                 taskProject = (Project) dialogSpinner.getSelectedItem();
             }
-
             // If a name has not been set
             if (taskName.trim().isEmpty()) {
                 dialogEditText.setError(getString(R.string.empty_task_name));
@@ -189,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
                 // TODO: Replace this by id of persisted task
                 long id = (long) (Math.random() * 50000);
 
-
                 Task task = new Task(
                         id,
                         taskProject.getId(),
@@ -198,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
                 );
 
                 addTask(task);
-
                 dialogInterface.dismiss();
             }
             // If name has been set, but project has not been set (this should never occur)
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      * @param task the task to be added to the list
      */
     private void addTask(@NonNull Task task) {
-        tasks.add(task);
+        viewModel.addTask(task);
         updateTasks();
     }
 
@@ -259,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
                 case OLD_FIRST:
                     Collections.sort(tasks, new Task.TaskOldComparator());
                     break;
-
             }
             adapter.updateTasks(tasks);
         }

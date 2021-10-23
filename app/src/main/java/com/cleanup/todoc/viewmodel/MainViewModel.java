@@ -20,4 +20,12 @@ public class MainViewModel extends ViewModel {
         tasksMLD.setValue(repository.getTasks());
         return tasksMLD;
     }
+
+    public void addTask(Task task) {
+        repository.addTask(task);
+    }
+
+    public void deleteTask(Task task) {
+        repository.deleteTask(task);
+    }
 }
