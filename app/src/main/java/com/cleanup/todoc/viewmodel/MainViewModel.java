@@ -51,15 +51,15 @@ public class MainViewModel extends ViewModel {
 
     // TV visibility
     public LiveData<Integer> illustrationVisibilityState() {
-        MutableLiveData<Integer> lbState;
+        MutableLiveData<Integer> tvState;
         if (Objects.requireNonNull(tasksMLD.getValue()).size() == 0) {
-            lbState = new MutableLiveData<>();
-            lbState.setValue(View.VISIBLE);
+            tvState = new MutableLiveData<>();
+            tvState.setValue(View.VISIBLE);
         }else{
-            lbState = new MutableLiveData<>();
-            lbState.setValue(View.GONE);
+            tvState = new MutableLiveData<>();
+            tvState.setValue(View.GONE);
         }
-        return lbState;
+        return tvState;
     }
 
     // Task sort by method
