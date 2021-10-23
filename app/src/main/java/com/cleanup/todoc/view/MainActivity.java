@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +28,6 @@ import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -230,28 +228,18 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        if (tasks.size() == 0) {
-            lblNoTasks.setVisibility(View.VISIBLE);
-            listTasks.setVisibility(View.GONE);
-        } else {
-            lblNoTasks.setVisibility(View.GONE);
-            listTasks.setVisibility(View.VISIBLE);
-            switch (sortMethod) {
-                case ALPHABETICAL:
-                    Collections.sort(tasks, new Task.TaskAZComparator());
-                    break;
-                case ALPHABETICAL_INVERTED:
-                    Collections.sort(tasks, new Task.TaskZAComparator());
-                    break;
-                case RECENT_FIRST:
-                    Collections.sort(tasks, new Task.TaskRecentComparator());
-                    break;
-                case OLD_FIRST:
-                    Collections.sort(tasks, new Task.TaskOldComparator());
-                    break;
-            }
+        // Observe visibilities changes
+        viewModel.illustrationVisibilityState().observe(this, state -> {
+            lblNoTasks.setVisibility(state);
             adapter.updateTasks(tasks);
-        }
+        });
+        viewModel.recyclerViewVisibilityState().observe(this, state -> {
+            listTasks.setVisibility(state);
+            adapter.updateTasks(tasks);
+        });
+
+        // Sort tasks
+        viewModel.TaskSort(sortMethod, tasks);
     }
 
     /**
