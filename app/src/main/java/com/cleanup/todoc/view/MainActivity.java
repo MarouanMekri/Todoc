@@ -215,12 +215,9 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      */
     private void showAddTaskDialog() {
         final AlertDialog dialog = getAddTaskDialog();
-
         dialog.show();
-
         dialogEditText = dialog.findViewById(R.id.txt_task_name);
         dialogSpinner = dialog.findViewById(R.id.project_spinner);
-
         populateDialogSpinner();
     }
 
@@ -237,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
             listTasks.setVisibility(state);
             adapter.updateTasks(tasks);
         });
-
         // Sort tasks
         viewModel.TaskSort(sortMethod, tasks);
     }
@@ -248,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
     @NonNull
     private AlertDialog getAddTaskDialog() {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this, R.style.Dialog);
-
         alertBuilder.setTitle(R.string.add_task);
         alertBuilder.setView(R.layout.dialog_add_task);
         alertBuilder.setPositiveButton(R.string.add, null);
@@ -257,15 +252,12 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
             dialogSpinner = null;
             dialog = null;
         });
-
         dialog = alertBuilder.create();
-
         // This instead of listener to positive button in order to avoid automatic dismiss
         dialog.setOnShowListener(dialogInterface -> {
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             button.setOnClickListener(view -> onPositiveButtonClick(dialog));
         });
-
         return dialog;
     }
 
@@ -275,8 +267,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
     private void populateDialogSpinner() {
         final ArrayAdapter<Project> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, allProjects);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        if (dialogSpinner != null) {
-            dialogSpinner.setAdapter(adapter);
-        }
+        Objects.requireNonNull(dialogSpinner).setAdapter(adapter);
     }
 }

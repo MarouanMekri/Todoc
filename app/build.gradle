@@ -19,9 +19,6 @@ android {
     lintOptions {
         disable 'RestrictedApi'
     }
-    buildFeatures {
-        viewBinding true
-    }
 }
 
 dependencies {
