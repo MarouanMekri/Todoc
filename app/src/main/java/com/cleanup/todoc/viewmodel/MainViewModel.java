@@ -1,65 +1,45 @@
 package com.cleanup.todoc.viewmodel;
 
-import android.view.View;
+import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.cleanup.todoc.di.Injection;
+import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.repository.Repository;
 import com.cleanup.todoc.utils.SortMethod;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-public class MainViewModel extends ViewModel {
+public class MainViewModel extends AndroidViewModel {
 
-    private final Repository repository = Injection.createRepository();
-    private final MutableLiveData<List<Task>> tasksMLD = new MutableLiveData<>();
+    private final Repository repository;
+    private final LiveData<List<Task>> tasks;
+
+    public MainViewModel(@NonNull Application application) {
+        super(application);
+        repository = new Repository(application);
+        tasks = repository.getAllTasks();
+    }
+
+    public List<Project> getAllProjects() {
+        return repository.getAllProjects();
+    }
 
     // Return tasks list from repository
-    public LiveData<List<Task>> getTasksLiveData() {
-        tasksMLD.setValue(repository.getTasks());
-        return tasksMLD;
+    public LiveData<List<Task>> getAllTasks() {
+        return tasks;
     }
 
-    // Add task in repository
-    public void addTask(Task task) {
-        repository.addTask(task);
+    public void insertTask(Task task) {
+        repository.insertTask(task);
     }
 
-    // Delete task from repository
     public void deleteTask(Task task) {
         repository.deleteTask(task);
-    }
-
-    // RV visibility
-    public LiveData<Integer> recyclerViewVisibilityState() {
-        MutableLiveData<Integer> rvState;
-        if (Objects.requireNonNull(tasksMLD.getValue()).size() == 0) {
-            rvState = new MutableLiveData<>();
-            rvState.setValue(View.GONE);
-        } else {
-            rvState = new MutableLiveData<>();
-            rvState.setValue(View.VISIBLE);
-        }
-        return rvState;
-    }
-
-    // TV visibility
-    public LiveData<Integer> illustrationVisibilityState() {
-        MutableLiveData<Integer> tvState;
-        if (Objects.requireNonNull(tasksMLD.getValue()).size() == 0) {
-            tvState = new MutableLiveData<>();
-            tvState.setValue(View.VISIBLE);
-        } else {
-            tvState = new MutableLiveData<>();
-            tvState.setValue(View.GONE);
-        }
-        return tvState;
     }
 
     // Task sort by method

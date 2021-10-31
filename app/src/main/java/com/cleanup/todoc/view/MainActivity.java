@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,11 +42,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements DeleteTaskListener {
 
     private MainViewModel viewModel;
-
-    /**
-     * List of all projects available in the application
-     */
-    private final Project[] allProjects = Project.getAllProjects();
+    private List<Project> projects = new ArrayList<>();
 
     /**
      * List of all current tasks of the application
@@ -106,15 +103,18 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         // ViewModel initialization
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
+        // Update project list
+        projects = viewModel.getAllProjects();
+
         listTasks = findViewById(R.id.list_tasks);
         lblNoTasks = findViewById(R.id.lbl_no_task);
 
         // RecyclerView initialization
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new TasksAdapter(Objects.requireNonNull(viewModel.getTasksLiveData().getValue()), this);
+        adapter = new TasksAdapter(tasks, this);
 
         // Observe tasks
-        viewModel.getTasksLiveData().observe(this, list -> {
+        viewModel.getAllTasks().observe(this, list -> {
             // update main list with list observed
             tasks = list;
             // UI update
@@ -123,7 +123,9 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         });
 
         // Add task button
-        findViewById(R.id.fab_add_task).setOnClickListener(view -> showAddTaskDialog());
+        findViewById(R.id.fab_add_task).setOnClickListener(view -> {
+            showAddTaskDialog();
+        });
     }
 
     @Override
@@ -186,16 +188,14 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
             // If both project and name of the task have been set
             else if (taskProject != null) {
                 // TODO: Replace this by id of persisted task
-                long id = (long) (Math.random() * 50000);
 
                 Task task = new Task(
-                        id,
                         taskProject.getId(),
                         taskName,
                         new Date().getTime()
                 );
 
-                viewModel.addTask(task);
+                viewModel.insertTask(task);
                 updateTasks();
                 dialogInterface.dismiss();
             }
@@ -225,17 +225,16 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      * Updates the list of tasks in the UI
      */
     private void updateTasks() {
-        // Observe visibilities changes
-        viewModel.illustrationVisibilityState().observe(this, state -> {
-            lblNoTasks.setVisibility(state);
+        if (tasks.size() == 0) {
+            lblNoTasks.setVisibility(View.VISIBLE);
+            listTasks.setVisibility(View.GONE);
+        } else {
+            lblNoTasks.setVisibility(View.GONE);
+            listTasks.setVisibility(View.VISIBLE);
+            // Sort tasks
+            viewModel.TaskSort(sortMethod, tasks);
             adapter.updateTasks(tasks);
-        });
-        viewModel.recyclerViewVisibilityState().observe(this, state -> {
-            listTasks.setVisibility(state);
-            adapter.updateTasks(tasks);
-        });
-        // Sort tasks
-        viewModel.TaskSort(sortMethod, tasks);
+        }
     }
 
     /**
@@ -265,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      * Sets the data of the Spinner with projects to associate to a new task
      */
     private void populateDialogSpinner() {
-        final ArrayAdapter<Project> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, allProjects);
+        final ArrayAdapter<Project> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Objects.requireNonNull(dialogSpinner).setAdapter(adapter);
     }
