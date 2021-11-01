@@ -82,17 +82,11 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
     /**
      * The RecyclerView which displays the list of tasks
      */
-    // Suppress warning is safe because variable is initialized in onCreate
-    @SuppressWarnings("NullableProblems")
-    @NonNull
     private RecyclerView listTasks;
 
     /**
      * The TextView displaying the empty state
      */
-    // Suppress warning is safe because variable is initialized in onCreate
-    @SuppressWarnings("NullableProblems")
-    @NonNull
     private TextView lblNoTasks;
 
     @Override
@@ -115,17 +109,14 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
         // Observe tasks
         viewModel.getAllTasks().observe(this, list -> {
-            // update main list with list observed
+            // Update main list with list observed
             tasks = list;
             // UI update
-            adapter.updateTasks(list);
-            listTasks.setAdapter(adapter);
+            updateTasks();
         });
 
         // Add task button
-        findViewById(R.id.fab_add_task).setOnClickListener(view -> {
-            showAddTaskDialog();
-        });
+        findViewById(R.id.fab_add_task).setOnClickListener(view -> showAddTaskDialog());
     }
 
     @Override
@@ -231,10 +222,11 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         } else {
             lblNoTasks.setVisibility(View.GONE);
             listTasks.setVisibility(View.VISIBLE);
-            // Sort tasks
-            viewModel.TaskSort(sortMethod, tasks);
-            adapter.updateTasks(tasks);
         }
+        adapter.updateTasks(tasks);
+        listTasks.setAdapter(adapter);
+        // Sort tasks
+        viewModel.TaskSort(sortMethod, tasks);
     }
 
     /**
