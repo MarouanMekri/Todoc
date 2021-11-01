@@ -13,16 +13,16 @@ import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
 @Database(entities = {Project.class, Task.class}, version = 1, exportSchema = false)
-public abstract class ProjectDB extends RoomDatabase {
+public abstract class TodocDB extends RoomDatabase {
 
-    private static ProjectDB instance;
+    private static TodocDB instance;
 
-    public abstract ProjectDao projectDao();
+    public abstract TodocDao projectDao();
 
-    public static synchronized ProjectDB getInstance(Context context) {
+    public static synchronized TodocDB getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                    ProjectDB.class, "db")
+                    TodocDB.class, "db")
                     .allowMainThreadQueries()
                     .fallbackToDestructiveMigration()
                     .addCallback(roomCallback)
@@ -31,7 +31,7 @@ public abstract class ProjectDB extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
@@ -41,17 +41,17 @@ public abstract class ProjectDB extends RoomDatabase {
 
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private ProjectDao projectDao;
+        private final TodocDao todocDao;
 
-        private PopulateDbAsyncTask (ProjectDB projectDb) {
-            projectDao = projectDb.projectDao();
+        private PopulateDbAsyncTask (TodocDB todocDb) {
+            todocDao = todocDb.projectDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            projectDao.insertProject(new Project("Projet Tartampion", 0xFFEADAD1));
-            projectDao.insertProject(new Project("Projet Lucidia", 0xFFB4CDBA));
-            projectDao.insertProject(new Project("Projet Circus", 0xFFA3CED2));
+            todocDao.insertProject(new Project("Projet Tartampion", 0xFFEADAD1));
+            todocDao.insertProject(new Project("Projet Lucidia", 0xFFB4CDBA));
+            todocDao.insertProject(new Project("Projet Circus", 0xFFA3CED2));
             return null;
         }
     }

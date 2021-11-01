@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.cleanup.todoc.database.ProjectDB;
-import com.cleanup.todoc.database.ProjectDao;
+import com.cleanup.todoc.database.TodocDB;
+import com.cleanup.todoc.database.TodocDao;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
@@ -14,57 +14,67 @@ import java.util.List;
 
 public class Repository {
 
-    private final ProjectDao projectDao;
+    private final TodocDao todocDao;
     private final List<Project> allProjects;
     private final LiveData<List<Task>> allTasks;
 
+    // Constructor
     public Repository(Application application) {
-        ProjectDB projectDB = ProjectDB.getInstance(application);
-        projectDao = projectDB.projectDao();
-        allProjects = projectDao.getAllProjects();
-        allTasks = projectDao.getAllTasks();
+        TodocDB todocDB = TodocDB.getInstance(application);
+        todocDao = todocDB.projectDao();
+        allProjects = todocDao.getAllProjects();
+        allTasks = todocDao.getAllTasks();
     }
 
+    // Return projects list calling database
     public List<Project> getAllProjects() {
         return allProjects;
     }
 
+    // Return project by task projectId
+    public Project getProject(int projectId) {
+        return todocDao.getProject(projectId);
+    }
+
+    // Return tasks list calling database
     public LiveData<List<Task>> getAllTasks() {
         return allTasks;
     }
 
+    // Insert task into database
     public void insertTask(Task task) {
-        new InsertTaskAsyncTask(projectDao).execute(task);
+        new InsertTaskAsyncTask(todocDao).execute(task);
     }
 
+    // Delete task from database
     public void deleteTask(Task task) {
-        new DeleteTaskAsyncTask(projectDao).execute(task);
+        new DeleteTaskAsyncTask(todocDao).execute(task);
     }
 
     private static class InsertTaskAsyncTask extends AsyncTask<Task, Void, Void> {
-        private final ProjectDao projectDao;
+        private final TodocDao todocDao;
 
-        private InsertTaskAsyncTask(ProjectDao projectDao) {
-            this.projectDao = projectDao;
+        private InsertTaskAsyncTask(TodocDao todocDao) {
+            this.todocDao = todocDao;
         }
 
         @Override
         protected Void doInBackground(Task... tasks) {
-            projectDao.insertTask(tasks[0]);
+            todocDao.insertTask(tasks[0]);
             return null;
         }
     }
 
     private static class DeleteTaskAsyncTask extends AsyncTask<Task, Void, Void> {
-        private ProjectDao projectDao;
+        private final TodocDao todocDao;
 
-        private DeleteTaskAsyncTask(ProjectDao projectDao) {
-            this.projectDao = projectDao;
+        private DeleteTaskAsyncTask(TodocDao todocDao) {
+            this.todocDao = todocDao;
         }
 
         @Override
         protected Void doInBackground(Task... tasks) {
-            projectDao.deleteTask(tasks[0]);
+            todocDao.deleteTask(tasks[0]);
             return null;
         }
     }

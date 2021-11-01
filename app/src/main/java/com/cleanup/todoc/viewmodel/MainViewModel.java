@@ -19,12 +19,14 @@ public class MainViewModel extends AndroidViewModel {
     private final Repository repository;
     private final LiveData<List<Task>> tasks;
 
+    // Constructor
     public MainViewModel(@NonNull Application application) {
         super(application);
         repository = new Repository(application);
         tasks = repository.getAllTasks();
     }
 
+    // Return projects list from repository
     public List<Project> getAllProjects() {
         return repository.getAllProjects();
     }
@@ -34,10 +36,12 @@ public class MainViewModel extends AndroidViewModel {
         return tasks;
     }
 
+    // Insert task using repository
     public void insertTask(Task task) {
         repository.insertTask(task);
     }
 
+    // Delete task using repository
     public void deleteTask(Task task) {
         repository.deleteTask(task);
     }

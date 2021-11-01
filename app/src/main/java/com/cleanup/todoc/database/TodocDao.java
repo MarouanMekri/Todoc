@@ -12,7 +12,7 @@ import com.cleanup.todoc.model.Task;
 import java.util.List;
 
 @Dao
-public interface ProjectDao {
+public interface TodocDao {
     @Insert
     void insertProject(Project project);
 
@@ -27,4 +27,7 @@ public interface ProjectDao {
 
     @Query("SELECT * FROM tasks")
     LiveData<List<Task>> getAllTasks();
+
+    @Query("SELECT * FROM projects WHERE id = :projectId")
+    Project getProject(int projectId);
 }
