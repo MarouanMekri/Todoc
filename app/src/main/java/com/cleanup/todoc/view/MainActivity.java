@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         adapter.updateTasks(tasks);
         listTasks.setAdapter(adapter);
         // Sort tasks
-        viewModel.TaskSort(sortMethod, tasks);
+        viewModel.taskSort(sortMethod, tasks);
     }
 
     /**

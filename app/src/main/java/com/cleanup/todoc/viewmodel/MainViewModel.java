@@ -47,7 +47,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     // Task sort by method
-    public void TaskSort(SortMethod sortMethod, List<Task> tasks) {
+    public void taskSort(SortMethod sortMethod, List<Task> tasks) {
         switch (sortMethod) {
             case ALPHABETICAL:
                 Collections.sort(tasks, new Task.TaskAZComparator());
