@@ -21,7 +21,7 @@ public class Repository {
     // Constructor
     public Repository(Application application) {
         TodocDB todocDB = TodocDB.getInstance(application);
-        todocDao = todocDB.projectDao();
+        todocDao = todocDB.todocDao();
         allProjects = todocDao.getAllProjects();
         allTasks = todocDao.getAllTasks();
     }

@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      * Dialog to create a new task
      */
     @Nullable
-    public AlertDialog dialog = null;
+    private AlertDialog dialog = null;
 
     /**
      * EditText that allows user to set the name of a task

@@ -17,7 +17,7 @@ public abstract class TodocDB extends RoomDatabase {
 
     private static TodocDB instance;
 
-    public abstract TodocDao projectDao();
+    public abstract TodocDao todocDao();
 
     public static synchronized TodocDB getInstance(Context context) {
         if (instance == null) {
@@ -44,7 +44,7 @@ public abstract class TodocDB extends RoomDatabase {
         private final TodocDao todocDao;
 
         private PopulateDbAsyncTask (TodocDB todocDb) {
-            todocDao = todocDb.projectDao();
+            todocDao = todocDb.todocDao();
         }
 
         @Override
