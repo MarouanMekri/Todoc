@@ -2,9 +2,8 @@ package com.cleanup.todoc.viewmodel;
 
 import android.app.Application;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
@@ -14,14 +13,13 @@ import com.cleanup.todoc.utils.SortMethod;
 import java.util.Collections;
 import java.util.List;
 
-public class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends ViewModel {
 
     private final Repository repository;
     private final LiveData<List<Task>> tasks;
 
     // Constructor
-    public MainViewModel(@NonNull Application application) {
-        super(application);
+    public MainViewModel(Application application) {
         repository = new Repository(application);
         tasks = repository.getAllTasks();
     }

@@ -27,6 +27,7 @@ import com.cleanup.todoc.utils.TasksAdapter;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.viewmodel.MainViewModel;
+import com.cleanup.todoc.viewmodel.ViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         setContentView(R.layout.activity_main);
 
         // ViewModel initialization
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        ViewModelProvider.Factory factory = new ViewModelFactory(getApplication());
+        viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
 
         // Update project list
         projects = viewModel.getAllProjects();
