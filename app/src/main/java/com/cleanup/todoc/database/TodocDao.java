@@ -27,7 +27,4 @@ public interface TodocDao {
 
     @Query("SELECT * FROM tasks")
     LiveData<List<Task>> getAllTasks();
-
-    @Query("SELECT * FROM projects WHERE id = :projectId")
-    Project getProject(int projectId);
 }
