@@ -31,11 +31,6 @@ public class Repository {
         return allProjects;
     }
 
-    // Return project by task projectId
-    public Project getProject(int projectId) {
-        return todocDao.getProject(projectId);
-    }
-
     // Return tasks list calling database
     public LiveData<List<Task>> getAllTasks() {
         return allTasks;

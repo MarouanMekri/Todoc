@@ -1,6 +1,5 @@
 package com.cleanup.todoc.utils;
 
-import android.app.Application;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
-import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
-import com.cleanup.todoc.repository.Repository;
 
 import java.util.List;
 /**
@@ -78,8 +75,6 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      * @author Gaëtan HERFRAY
      */
     static class TaskViewHolder extends RecyclerView.ViewHolder {
-        static Application application = new Application();
-        static Repository repository = new Repository(application);
         /**
          * The circle icon showing the color of the project
          */
@@ -137,15 +132,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         void bind(Task task) {
             lblTaskName.setText(task.getName());
             imgDelete.setTag(task);
-            final Project taskProject = repository.getProject((int) task.projectId);
-            if (taskProject != null) {
-                imgProject.setSupportImageTintList(ColorStateList.valueOf(taskProject.getColor()));
-                lblProjectName.setText(taskProject.getName());
-            } else {
-                imgProject.setVisibility(View.INVISIBLE);
-                lblProjectName.setText("");
-            }
-
+            imgProject.setSupportImageTintList(ColorStateList.valueOf(task.getProjectColor()));
+            lblProjectName.setText(task.getProjectName());
         }
     }
 }
