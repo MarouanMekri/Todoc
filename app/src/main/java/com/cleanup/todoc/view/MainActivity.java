@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.repository.Repository;
 import com.cleanup.todoc.utils.DeleteTaskListener;
 import com.cleanup.todoc.utils.SortMethod;
 import com.cleanup.todoc.utils.TasksAdapter;
@@ -96,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         setContentView(R.layout.activity_main);
 
         // ViewModel initialization
-        ViewModelProvider.Factory factory = new ViewModelFactory(getApplication());
+        Repository repository = new Repository(getApplication());
+        ViewModelProvider.Factory factory = new ViewModelFactory(repository);
         viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
 
         // Update project list

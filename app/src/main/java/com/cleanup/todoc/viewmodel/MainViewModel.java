@@ -1,7 +1,5 @@
 package com.cleanup.todoc.viewmodel;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -19,8 +17,8 @@ public class MainViewModel extends ViewModel {
     private final LiveData<List<Task>> tasks;
 
     // Constructor
-    public MainViewModel(Application application) {
-        repository = new Repository(application);
+    public MainViewModel(Repository repository) {
+        this.repository = repository;
         tasks = repository.getAllTasks();
     }
 
