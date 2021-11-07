@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      */
     @NonNull
     private List<Task> tasks;
+    public static List<Project> projects;
 
     /**
      * The listener for when a task needs to be deleted
@@ -37,8 +39,9 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      *
      * @param tasks the list of tasks the adapter deals with to set
      */
-    public TasksAdapter(@NonNull final List<Task> tasks, @NonNull final DeleteTaskListener deleteTaskListener) {
+    public TasksAdapter(@NonNull final List<Task> tasks, @NonNull final List<Project> projects, @NonNull final DeleteTaskListener deleteTaskListener) {
         this.tasks = tasks;
+        TasksAdapter.projects = projects;
         this.deleteTaskListener = deleteTaskListener;
     }
 
@@ -132,8 +135,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
         void bind(Task task) {
             lblTaskName.setText(task.getName());
             imgDelete.setTag(task);
-            imgProject.setSupportImageTintList(ColorStateList.valueOf(task.getProjectColor()));
-            lblProjectName.setText(task.getProjectName());
+            imgProject.setSupportImageTintList(ColorStateList.valueOf(projects.get((int)task.projectId - 1).getColor()));
+            lblProjectName.setText(projects.get((int)task.projectId - 1).getName());
         }
     }
 }

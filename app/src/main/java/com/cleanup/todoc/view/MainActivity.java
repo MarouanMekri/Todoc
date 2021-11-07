@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
         // RecyclerView initialization
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new TasksAdapter(tasks, this);
+        adapter = new TasksAdapter(tasks, projects, this);
 
         // Observe tasks
         viewModel.getAllTasks().observe(this, list -> {
@@ -186,8 +186,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
                 Task task = new Task(
                         taskProject.getId(),
-                        taskProject.getName(),
-                        taskProject.getColor(),
                         taskName,
                         new Date().getTime()
                 );

@@ -25,10 +25,6 @@ public class Task {
      */
     public long projectId;
 
-    public String projectName;
-
-    public int projectColor;
-
     /**
      * The name of the task
      */
@@ -47,10 +43,8 @@ public class Task {
      * @param name              the name of the task to set
      * @param creationTimestamp the timestamp when the task has been created to set
      */
-    public Task(long projectId, String projectName, int projectColor, @NonNull String name, long creationTimestamp) {
+    public Task(long projectId, @NonNull String name, long creationTimestamp) {
         this.projectId = projectId;
-        this.projectName = projectName;
-        this.projectColor = projectColor;
         this.name = name;
         this.creationTimestamp = creationTimestamp;
     }
@@ -72,14 +66,6 @@ public class Task {
     @NonNull
     public String getName() {
         return name;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public int getProjectColor() {
-        return projectColor;
     }
 
     /**
