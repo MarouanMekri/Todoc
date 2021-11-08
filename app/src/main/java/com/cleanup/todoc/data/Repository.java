@@ -1,14 +1,14 @@
-package com.cleanup.todoc.repository;
+package com.cleanup.todoc.data;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.cleanup.todoc.database.TodocDB;
-import com.cleanup.todoc.database.TodocDao;
-import com.cleanup.todoc.model.Project;
-import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.data.model.Project;
+import com.cleanup.todoc.data.model.Task;
+import com.cleanup.todoc.data.room.TodocDB;
+import com.cleanup.todoc.data.room.TodocDao;
 
 import java.util.List;
 

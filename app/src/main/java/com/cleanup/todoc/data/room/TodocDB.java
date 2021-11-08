@@ -1,4 +1,4 @@
-package com.cleanup.todoc.database;
+package com.cleanup.todoc.data.room;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,8 +9,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.cleanup.todoc.model.Project;
-import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.data.model.Project;
+import com.cleanup.todoc.data.model.Task;
 
 @Database(entities = {Project.class, Task.class}, version = 1, exportSchema = false)
 public abstract class TodocDB extends RoomDatabase {

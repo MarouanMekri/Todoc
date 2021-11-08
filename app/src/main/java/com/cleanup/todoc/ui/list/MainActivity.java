@@ -1,4 +1,4 @@
-package com.cleanup.todoc.view;
+package com.cleanup.todoc.ui.list;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -21,14 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleanup.todoc.R;
-import com.cleanup.todoc.repository.Repository;
-import com.cleanup.todoc.utils.DeleteTaskListener;
-import com.cleanup.todoc.utils.SortMethod;
-import com.cleanup.todoc.utils.TasksAdapter;
-import com.cleanup.todoc.model.Project;
-import com.cleanup.todoc.model.Task;
-import com.cleanup.todoc.viewmodel.MainViewModel;
-import com.cleanup.todoc.viewmodel.ViewModelFactory;
+import com.cleanup.todoc.data.Repository;
+import com.cleanup.todoc.data.model.Project;
+import com.cleanup.todoc.data.model.Task;
+import com.cleanup.todoc.ui.ViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.Date;

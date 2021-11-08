@@ -1,4 +1,4 @@
-package com.cleanup.todoc.utils;
+package com.cleanup.todoc.ui.list;
 
 /**
  * List of all possible sort methods for task
