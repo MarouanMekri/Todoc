@@ -26,66 +26,21 @@ import com.cleanup.todoc.data.model.Project;
 import com.cleanup.todoc.data.model.Task;
 import com.cleanup.todoc.ui.ViewModelFactory;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
-/**
- * <p>Home activity of the application which is displayed when the user opens the app.</p>
- * <p>Displays the list of tasks.</p>
- *
- * @author Gaëtan HERFRAY
- */
 public class MainActivity extends AppCompatActivity implements DeleteTaskListener {
 
     private MainViewModel viewModel;
-    private List<Project> projects = new ArrayList<>();
 
-    /**
-     * List of all current tasks of the application
-     */
-    @NonNull
-    private List<Task> tasks = new ArrayList<>();
-
-    /**
-     * The adapter which handles the list of tasks
-     */
-    private TasksAdapter adapter;
-
-    /**
-     * The sort method to be used to display tasks
-     */
-    @NonNull
     private SortMethod sortMethod = SortMethod.NONE;
 
-    /**
-     * Dialog to create a new task
-     */
-    @Nullable
-    private AlertDialog dialog = null;
-
-    /**
-     * EditText that allows user to set the name of a task
-     */
-    @Nullable
-    private EditText dialogEditText = null;
-
-    /**
-     * Spinner that allows the user to associate a project to a task
-     */
-    @Nullable
-    private Spinner dialogSpinner = null;
-
-    /**
-     * The RecyclerView which displays the list of tasks
-     */
+    private TasksAdapter adapter;
     private RecyclerView listTasks;
 
-    /**
-     * The TextView displaying the empty state
-     */
     private TextView lblNoTasks;
+    private AlertDialog dialog = null;
+    private EditText dialogEditText = null;
+    private Spinner dialogSpinner = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,23 +52,16 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         ViewModelProvider.Factory factory = new ViewModelFactory(repository);
         viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
 
-        // Update project list
-        projects = viewModel.getAllProjects();
-
+        // UI components
         listTasks = findViewById(R.id.list_tasks);
         lblNoTasks = findViewById(R.id.lbl_no_task);
 
         // RecyclerView initialization
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new TasksAdapter(tasks, projects, this);
+        adapter = new TasksAdapter(viewModel.getAllTasks().getValue(), viewModel.getAllProjects(), this);
 
-        // Observe tasks
-        viewModel.getAllTasks().observe(this, list -> {
-            // Update main list with list observed
-            tasks = list;
-            // UI update
-            updateTasks();
-        });
+        // Observe tasks then update UI
+        viewModel.getAllTasks().observe(this, list -> updateTasks());
 
         // Add task button
         findViewById(R.id.fab_add_task).setOnClickListener(view -> showAddTaskDialog());
@@ -157,11 +105,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         updateTasks();
     }
 
-    /**
-     * Called when the user clicks on the positive button of the Create Task Dialog.
-     *
-     * @param dialogInterface the current displayed dialog
-     */
     private void onPositiveButtonClick(DialogInterface dialogInterface) {
         // If dialog is open
         if (dialogEditText != null && dialogSpinner != null) {
@@ -201,9 +144,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         }
     }
 
-    /**
-     * Shows the Dialog for adding a Task
-     */
     private void showAddTaskDialog() {
         final AlertDialog dialog = getAddTaskDialog();
         dialog.show();
@@ -212,26 +152,20 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         populateDialogSpinner();
     }
 
-    /**
-     * Updates the list of tasks in the UI
-     */
     private void updateTasks() {
-        if (tasks.size() == 0) {
+        if (viewModel.getAllTasks().getValue().size() == 0) {
             lblNoTasks.setVisibility(View.VISIBLE);
             listTasks.setVisibility(View.GONE);
         } else {
             lblNoTasks.setVisibility(View.GONE);
             listTasks.setVisibility(View.VISIBLE);
         }
-        adapter.updateTasks(tasks);
+        adapter.updateTasks(viewModel.getAllTasks().getValue());
         listTasks.setAdapter(adapter);
         // Sort tasks
-        viewModel.taskSort(sortMethod, tasks);
+        viewModel.taskSort(sortMethod, viewModel.getAllTasks().getValue());
     }
 
-    /**
-     * Returns the dialog allowing the user to create a new task.
-     */
     @NonNull
     private AlertDialog getAddTaskDialog() {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this, R.style.Dialog);
@@ -252,12 +186,9 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         return dialog;
     }
 
-    /**
-     * Sets the data of the Spinner with projects to associate to a new task
-     */
     private void populateDialogSpinner() {
-        final ArrayAdapter<Project> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
+        final ArrayAdapter<Project> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, viewModel.getAllProjects());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Objects.requireNonNull(dialogSpinner).setAdapter(adapter);
+        dialogSpinner.setAdapter(adapter);
     }
 }
