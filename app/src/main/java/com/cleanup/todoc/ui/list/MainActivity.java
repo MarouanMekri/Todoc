@@ -28,15 +28,16 @@ import com.cleanup.todoc.ui.ViewModelFactory;
 
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements DeleteTaskListener {
+public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
 
     private SortMethod sortMethod = SortMethod.NONE;
 
     private TasksAdapter adapter;
-    private RecyclerView listTasks;
 
+    // UI components
+    private RecyclerView listTasks;
     private TextView lblNoTasks;
     private AlertDialog dialog = null;
     private EditText dialogEditText = null;
@@ -48,17 +49,21 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
         setContentView(R.layout.activity_main);
 
         // ViewModel initialization
-        Repository repository = new Repository(getApplication());
-        ViewModelProvider.Factory factory = new ViewModelFactory(repository);
+        ViewModelProvider.Factory factory = new ViewModelFactory(new Repository(getApplication()));
         viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
 
-        // UI components
+        // UI components links
         listTasks = findViewById(R.id.list_tasks);
         lblNoTasks = findViewById(R.id.lbl_no_task);
 
         // RecyclerView initialization
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new TasksAdapter(viewModel.getAllTasks().getValue(), viewModel.getAllProjects(), this);
+
+        // Adapter instantiation & implement onDeleteTaskListener interface
+        adapter = new TasksAdapter(viewModel.getAllTasks().getValue(), viewModel.getAllProjects(), task -> {
+            viewModel.deleteTask(task);
+            updateTasks();
+        });
 
         // Observe tasks then update UI
         viewModel.getAllTasks().observe(this, list -> updateTasks());
@@ -97,12 +102,6 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
                 updateTasks();
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onDeleteTask(Task task) {
-        viewModel.deleteTask(task);
-        updateTasks();
     }
 
     private void onPositiveButtonClick(DialogInterface dialogInterface) {
@@ -153,13 +152,16 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
     }
 
     private void updateTasks() {
+        // If tasks list is empty show illusion
         if (viewModel.getAllTasks().getValue().size() == 0) {
             lblNoTasks.setVisibility(View.VISIBLE);
             listTasks.setVisibility(View.GONE);
         } else {
+            // Else show tasks list
             lblNoTasks.setVisibility(View.GONE);
             listTasks.setVisibility(View.VISIBLE);
         }
+        // Update adapter with latest tasks list
         adapter.updateTasks(viewModel.getAllTasks().getValue());
         listTasks.setAdapter(adapter);
         // Sort tasks
