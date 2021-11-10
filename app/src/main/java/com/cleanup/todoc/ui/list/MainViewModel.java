@@ -16,19 +16,24 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final Repository repository;
 
+    private final LiveData<List<Task>> tasks;
+    private final List<Project> projects;
+
     // Constructor
     public MainViewModel(@NonNull Repository repository) {
         this.repository = repository;
+        tasks = repository.getAllTasks();
+        projects = repository.getAllProjects();
     }
 
     // Return projects list from repository
     public List<Project> getAllProjects() {
-        return repository.getAllProjects();
+        return projects;
     }
 
     // Return tasks list from repository
     public LiveData<List<Task>> getAllTasks() {
-        return repository.getAllTasks();
+        return tasks;
     }
 
     // Insert task using repository
