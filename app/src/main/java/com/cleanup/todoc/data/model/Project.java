@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 public class Project {
 
     @PrimaryKey(autoGenerate = true)
-    public long id;
+    public int id;
 
     @NonNull
     private final String name;
@@ -22,7 +22,7 @@ public class Project {
         this.color = color;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -40,9 +40,5 @@ public class Project {
     @NonNull
     public String toString() {
         return getName();
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

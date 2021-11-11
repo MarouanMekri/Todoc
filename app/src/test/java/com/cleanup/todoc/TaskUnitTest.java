@@ -1,6 +1,7 @@
 package com.cleanup.todoc;
 
 import com.cleanup.todoc.data.model.Task;
+import com.cleanup.todoc.ui.utils.TaskComparators;
 
 import org.junit.Test;
 
@@ -12,11 +13,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
-/**
- * Unit tests for tasks
- *
- * @author Gaëtan HERFRAY
- */
 public class TaskUnitTest {
     @Test
     public void test_projects() {
@@ -25,10 +21,6 @@ public class TaskUnitTest {
         final Task task3 = new Task(3, "task 3", new Date().getTime());
         final Task task4 = new Task(4, "task 4", new Date().getTime());
 
-        assertEquals("Projet Tartampion", task1.getProject().getName());
-        assertEquals("Projet Lucidia", task2.getProject().getName());
-        assertEquals("Projet Circus", task3.getProject().getName());
-        assertNull(task4.getProject());
     }
 
     @Test
@@ -41,7 +33,7 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskAZComparator());
+        Collections.sort(tasks, new TaskComparators.TaskAZComparator());
 
         assertSame(tasks.get(0), task1);
         assertSame(tasks.get(1), task3);
@@ -58,7 +50,7 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskZAComparator());
+        Collections.sort(tasks, new TaskComparators.TaskZAComparator());
 
         assertSame(tasks.get(0), task2);
         assertSame(tasks.get(1), task3);
@@ -75,7 +67,7 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskRecentComparator());
+        Collections.sort(tasks, new TaskComparators.TaskRecentComparator());
 
         assertSame(tasks.get(0), task3);
         assertSame(tasks.get(1), task2);
@@ -92,7 +84,7 @@ public class TaskUnitTest {
         tasks.add(task1);
         tasks.add(task2);
         tasks.add(task3);
-        Collections.sort(tasks, new Task.TaskOldComparator());
+        Collections.sort(tasks, new TaskComparators.TaskOldComparator());
 
         assertSame(tasks.get(0), task1);
         assertSame(tasks.get(1), task2);
