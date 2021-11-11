@@ -36,4 +36,8 @@ public class TaskRepository {
     public void deleteTask(Task task) {
         taskDao.deleteTask(task);
     }
+
+    public void deleteAllTask() {
+        taskDao.deleteAllTasks();
+    }
 }

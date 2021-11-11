@@ -90,6 +90,10 @@ public class MainViewModel extends ViewModel {
         executor.execute(() -> taskRepository.deleteTask(task));
     }
 
+    public void deleteAllTasks() {
+        executor.execute(taskRepository::deleteAllTask);
+    }
+
     /**
      * Called to sort tasks
      *
