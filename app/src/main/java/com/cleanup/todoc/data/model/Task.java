@@ -6,8 +6,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import java.util.Comparator;
-
 @Entity(tableName = "tasks", foreignKeys = {@ForeignKey(entity = Project.class, parentColumns = "id", childColumns = "project_id", onDelete = ForeignKey.CASCADE)})
 public class Task {
 

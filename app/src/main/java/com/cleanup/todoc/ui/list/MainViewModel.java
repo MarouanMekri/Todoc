@@ -25,7 +25,10 @@ public class MainViewModel extends ViewModel {
      * Repository to access ProjectDao interface methods
      */
     private final ProjectRepository projectRepository;
-
+    /**
+     * Executor to access Database in another thread than UI thread
+     */
+    private final Executor executor;
     /**
      * LiveData containing the list of existing Tasks
      */
@@ -35,11 +38,6 @@ public class MainViewModel extends ViewModel {
      */
     private LiveData<List<Project>> projects = new MutableLiveData<>();
 
-    /**
-     * Executor to access Database in another thread than UI thread
-     */
-    private final Executor executor;
-
     public MainViewModel(final TaskRepository taskRepository, final ProjectRepository projectRepository, final Executor executor) {
         this.taskRepository = taskRepository;
         this.projectRepository = projectRepository;
@@ -48,6 +46,7 @@ public class MainViewModel extends ViewModel {
 
     /**
      * Called to return Tasks list
+     *
      * @return tasks : Tasks LiveData
      */
     public LiveData<List<Task>> getTasks() {
@@ -61,6 +60,7 @@ public class MainViewModel extends ViewModel {
 
     /**
      * Called to return Projects list
+     *
      * @return tasks : Projects LiveData
      */
     public LiveData<List<Project>> getProjects() {
@@ -74,6 +74,7 @@ public class MainViewModel extends ViewModel {
 
     /**
      * Called to insert new Task
+     *
      * @param task : task to insert
      */
     public void insertTask(Task task) {
@@ -82,6 +83,7 @@ public class MainViewModel extends ViewModel {
 
     /**
      * Called to delete a task
+     *
      * @param task : task to delete
      */
     public void deleteTask(Task task) {
@@ -90,8 +92,9 @@ public class MainViewModel extends ViewModel {
 
     /**
      * Called to sort tasks
+     *
      * @param sortMethod : sort method
-     * @param tasks : tasks list to sort
+     * @param tasks      : tasks list to sort
      */
     public void taskSort(SortMethod sortMethod, List<Task> tasks) {
         switch (sortMethod) {

@@ -30,18 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements DeleteTaskListener{
-    /**
-     * ViewModel
-     */
-    private MainViewModel viewModel;
-
-    /**
-     * The sort method to be used to display tasks
-     */
-    @NonNull
-    private SortMethod sortMethod = SortMethod.NONE;
-
+public class MainActivity extends AppCompatActivity implements DeleteTaskListener {
     /**
      * List of all current projects of the application
      */
@@ -52,12 +41,19 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      */
     @NonNull
     private final List<Task> tasks = new ArrayList<>();
-
     /**
      * The adapter which handles the list of tasks
      */
     private final TasksAdapter adapter = new TasksAdapter(tasks, projects, this);
-
+    /**
+     * ViewModel
+     */
+    private MainViewModel viewModel;
+    /**
+     * The sort method to be used to display tasks
+     */
+    @NonNull
+    private SortMethod sortMethod = SortMethod.NONE;
     /**
      * UI components
      */
@@ -131,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
     /**
      * Implementation of onDeleteTaskListener interface
+     *
      * @param task : task to be deleted
      */
     @Override
@@ -140,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
     /**
      * Called after user confirmation that task form is completed. Create new Task
+     *
      * @param dialogInterface : Dialog created before in getAddTaskDialog
      */
     private void onPositiveButtonClick(DialogInterface dialogInterface) {
@@ -169,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
                 dialogInterface.dismiss();
             }
             // If name has been set, but project has not been set (this should never occur)
-            else{
+            else {
                 dialogInterface.dismiss();
             }
         }
@@ -211,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
     /**
      * Called to create an Alertdialog
+     *
      * @return dialog : AlertDialog to show in showAddTaskDialog
      */
     @NonNull

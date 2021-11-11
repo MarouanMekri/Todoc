@@ -13,17 +13,11 @@ import com.cleanup.todoc.data.room.dao.TaskDao;
 
 /**
  * <p>This class defines Todoc database which contains two tables :
- *      - projects
- *      - tasks</p>
+ * - projects
+ * - tasks</p>
  */
 @Database(entities = {Project.class, Task.class}, version = 1)
 public abstract class TodocDB extends RoomDatabase {
-
-    /**
-     * Dao for both database tables
-     */
-    public abstract TaskDao taskDao();
-    public abstract ProjectDao projectDao();
 
     /**
      * Application database instance
@@ -32,6 +26,7 @@ public abstract class TodocDB extends RoomDatabase {
 
     /**
      * Create database singleton
+     *
      * @param context : context application
      * @return : TodocDB instance
      */
@@ -43,4 +38,11 @@ public abstract class TodocDB extends RoomDatabase {
         }
         return instance;
     }
+
+    /**
+     * Dao for both database tables
+     */
+    public abstract TaskDao taskDao();
+
+    public abstract ProjectDao projectDao();
 }

@@ -19,11 +19,15 @@ import java.util.List;
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHolder> {
 
     /**
+     * The listener for when a task needs to be deleted
+     */
+    @NonNull
+    private final DeleteTaskListener deleteTaskListener;
+    /**
      * The list of tasks the adapter deals with
      */
     @NonNull
     private List<Task> tasks;
-
     /**
      * The list of projects the adapter deals with
      */
@@ -31,19 +35,13 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     private List<Project> projects;
 
     /**
-     * The listener for when a task needs to be deleted
-     */
-    @NonNull
-    private final DeleteTaskListener deleteTaskListener;
-
-    /**
      * Instantiates a new TasksAdapter.
      *
-     * @param tasks the list of tasks the adapter deals with to set
-     * @param projects the list of projects the adapter deals with to set
+     * @param tasks              the list of tasks the adapter deals with to set
+     * @param projects           the list of projects the adapter deals with to set
      * @param deleteTaskListener the listener who delete task
      */
-    public TasksAdapter(@NonNull final List<Task> tasks,@NonNull final List<Project> projects, @NonNull final DeleteTaskListener deleteTaskListener) {
+    public TasksAdapter(@NonNull final List<Task> tasks, @NonNull final List<Project> projects, @NonNull final DeleteTaskListener deleteTaskListener) {
         this.tasks = tasks;
         this.projects = projects;
         this.deleteTaskListener = deleteTaskListener;
@@ -152,6 +150,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
         /**
          * Get Project of an associated Task, by searching in Projects List using project id
+         *
          * @param projectId : id of the Project to search
          * @return : Associated Project
          */
