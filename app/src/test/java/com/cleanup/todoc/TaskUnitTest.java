@@ -34,9 +34,9 @@ public class TaskUnitTest {
 
         // Compare Names
         assertEquals("task 1", task1.getName());
-        assertEquals("task 2", task1.getName());
-        assertEquals("task 3", task1.getName());
-        assertEquals("task 4", task1.getName());
+        assertEquals("task 2", task2.getName());
+        assertEquals("task 3", task3.getName());
+        assertEquals("task 4", task4.getName());
     }
 
     /**
