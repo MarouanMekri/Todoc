@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.data.model.Project;
 import com.cleanup.todoc.data.model.Task;
+import com.cleanup.todoc.ui.utils.EspressoIdlingResource;
 
 import java.util.List;
 
@@ -55,6 +56,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     public void updateTasks(@NonNull final List<Task> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
+        // Decrement counter for testing
+        EspressoIdlingResource.decrement();
     }
 
     /**
@@ -121,6 +124,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
             imgDelete = itemView.findViewById(R.id.img_delete);
 
             imgDelete.setOnClickListener(view -> {
+                // Increment counter for testing
+                EspressoIdlingResource.increment();
                 final Object tag = view.getTag();
                 if (tag instanceof Task) {
                     TaskViewHolder.this.deleteTaskListener.onDeleteTask((Task) tag);

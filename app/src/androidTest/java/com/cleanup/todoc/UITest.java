@@ -1,6 +1,7 @@
 package com.cleanup.todoc;
 
 import androidx.room.Room;
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -14,6 +15,7 @@ import com.cleanup.todoc.di.Injection;
 import com.cleanup.todoc.ui.ViewModelFactory;
 import com.cleanup.todoc.ui.list.MainActivity;
 import com.cleanup.todoc.ui.list.MainViewModel;
+import com.cleanup.todoc.ui.utils.EspressoIdlingResource;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,16 +61,21 @@ public class UITest {
 
         // Initialize parent table in database
         Project[] projects = Injection.provideProjects(mainActivity);
-
         for (Project project : projects) {
             projectRepository.insertProject(project);
         }
+
+        // Register into EspressoIdlingResource before running any test
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getIdlingResource());
     }
 
     @After
     public void clean_database() {
         // Clean tasks table for next test
         viewModel.deleteAllTasks();
+
+        // Unregister from EspressoIdlingResource after test finished
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getIdlingResource());
     }
 
     @Test
@@ -117,13 +124,6 @@ public class UITest {
         // Remove second item
         onView(withId(R.id.list_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
-
-        // Wait for recyclerview to get updated
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         // Check if list of Tasks has changed
         onView(withId(R.id.list_tasks))
