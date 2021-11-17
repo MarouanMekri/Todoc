@@ -8,12 +8,14 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "projects")
 public class Project {
 
-    @NonNull
-    private final String name;
-    @ColorInt
-    private final int color;
     @PrimaryKey(autoGenerate = true)
     public int id;
+
+    @NonNull
+    private final String name;
+
+    @ColorInt
+    private final int color;
 
     public Project(@NonNull String name, @ColorInt int color) {
         this.name = name;
