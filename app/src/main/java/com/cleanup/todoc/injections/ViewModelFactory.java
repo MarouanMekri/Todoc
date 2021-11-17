@@ -1,4 +1,4 @@
-package com.cleanup.todoc.ui;
+package com.cleanup.todoc.injections;
 
 import android.content.Context;
 
@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.cleanup.todoc.data.repositories.ProjectRepository;
 import com.cleanup.todoc.data.repositories.TaskRepository;
 import com.cleanup.todoc.data.room.database.TodocDB;
-import com.cleanup.todoc.di.Injection;
 import com.cleanup.todoc.ui.list.MainViewModel;
 
 import java.util.concurrent.Executor;
@@ -22,8 +21,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private final Executor executor;
 
     public ViewModelFactory(@NonNull Context context) {
-        TodocDB db = Injection.provideDatabase(context);
-        this.executor = Injection.provideExecutor();
+        TodocDB db = DI.provideDatabase(context);
+        this.executor = DI.provideExecutor();
         this.taskRepository = new TaskRepository(db.taskDao());
         this.projectRepository = new ProjectRepository(db.projectDao());
     }

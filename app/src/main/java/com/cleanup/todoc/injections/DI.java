@@ -1,4 +1,4 @@
-package com.cleanup.todoc.di;
+package com.cleanup.todoc.injections;
 
 import android.content.Context;
 
@@ -9,7 +9,7 @@ import com.cleanup.todoc.data.room.database.TodocDB;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class Injection {
+public class DI {
 
     /**
      * Provides singleton Todoc Database instance
@@ -21,7 +21,7 @@ public class Injection {
         TodocDB instance = TodocDB.getInstance(context);
 
         // Check if data already exists in projects datatable
-        Injection.provideExecutor().execute(() -> {
+        DI.provideExecutor().execute(() -> {
             if (instance.projectDao().getProject(1) == null) {
                 Project[] projects = provideProjects(context);
                 for (Project project : projects) {

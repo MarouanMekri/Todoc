@@ -11,8 +11,8 @@ import com.cleanup.todoc.Utils.RecyclerViewMatcher;
 import com.cleanup.todoc.data.model.Project;
 import com.cleanup.todoc.data.repositories.ProjectRepository;
 import com.cleanup.todoc.data.room.database.TodocDB;
-import com.cleanup.todoc.di.Injection;
-import com.cleanup.todoc.ui.ViewModelFactory;
+import com.cleanup.todoc.injections.DI;
+import com.cleanup.todoc.injections.ViewModelFactory;
 import com.cleanup.todoc.ui.list.MainActivity;
 import com.cleanup.todoc.ui.list.MainViewModel;
 import com.cleanup.todoc.ui.utils.EspressoIdlingResource;
@@ -60,7 +60,7 @@ public class UITest {
         ProjectRepository projectRepository = new ProjectRepository(database.projectDao());
 
         // Initialize parent table in database
-        Project[] projects = Injection.provideProjects(mainActivity);
+        Project[] projects = DI.provideProjects(mainActivity);
         for (Project project : projects) {
             projectRepository.insertProject(project);
         }
@@ -80,71 +80,83 @@ public class UITest {
 
     @Test
     public void myTasksList_createTask() {
-        // Perform click on Floating Action Button
+        // Given : Fill out task form
         onView(withId(R.id.fab_add_task))
                 .perform(click());
-
-        // Perform click on Edit Text to enable focus
         onView(withId(R.id.txt_task_name))
                 .perform(click());
-
-        // Write text
         onView(withId(R.id.txt_task_name))
                 .perform(typeText("Tache de test"));
-
-        // Close keyboard
         closeSoftKeyboard();
 
-        // Close Dialog by clicking on Positive Button
+        // When : Perform positive button to create task
         onView(withText("Ajouter"))
                 .perform(click());
 
-        // Check if RecycleView is updated
+        // Then : Check if RecycleView is updated
         onView(withId(R.id.list_tasks))
                 .check(withItemCount(1));
     }
 
     @Test
     public void myTasksList_createTasks_thenDeleteTask() {
-        // Create 3 tasks
-        onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("Tache 1"));
-        onView(withText("Ajouter")).perform(click());
-        onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("Tache 2"));
-        onView(withText("Ajouter")).perform(click());
-        onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("Tache 3"));
-        onView(withText("Ajouter")).perform(click());
+        // Given : Create 3 tasks
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("Tache 1"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("Tache 2"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("Tache 3"));
+        onView(withText("Ajouter"))
+                .perform(click());
 
-        // Check if RecycleView is updated
+        // When : Check if RecycleView is updated & remove second task
         onView(withId(R.id.list_tasks))
                 .check(withItemCount(3));
-
-        // Remove second item
         onView(withId(R.id.list_tasks))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
 
-        // Check if list of Tasks has changed
+        // Then : Check if RecycleView is updated
         onView(withId(R.id.list_tasks))
                 .check(withItemCount(2));
     }
 
     @Test
     public void myTasksList_createTasks_thenSort() {
-        // Create 3 tasks
-        onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("aaa Tâche example"));
-        onView(withText("Ajouter")).perform(click());
-        onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("zzz Tâche example"));
-        onView(withText("Ajouter")).perform(click());
-        onView(withId(R.id.fab_add_task)).perform(click());
-        onView(withId(R.id.txt_task_name)).perform(replaceText("hhh Tâche example"));
-        onView(withText("Ajouter")).perform(click());
+        // Given : Create 3 tasks
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("aaa Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("zzz Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("hhh Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
 
-        // Sort alphabetical
+        // When : Perform menu button
         onView(withId(R.id.action_filter)).perform(click());
+
+        // Then : Sort alphabetical & alphabetical inverted & old first & recent first
         onView(withText(R.string.sort_alphabetical)).perform(click());
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
@@ -153,7 +165,6 @@ public class UITest {
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("zzz Tâche example")));
 
-        // Sort alphabetical inverted
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_alphabetical_invert)).perform(click());
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
@@ -163,7 +174,6 @@ public class UITest {
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
 
-        // Sort old first
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_oldest_first)).perform(click());
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
@@ -173,7 +183,6 @@ public class UITest {
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("hhh Tâche example")));
 
-        // Sort recent first
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_recent_first)).perform(click());
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))

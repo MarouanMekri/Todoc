@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.data.model.Project;
 import com.cleanup.todoc.data.model.Task;
-import com.cleanup.todoc.ui.ViewModelFactory;
+import com.cleanup.todoc.injections.ViewModelFactory;
 import com.cleanup.todoc.ui.utils.SortMethod;
 
 import java.util.ArrayList;

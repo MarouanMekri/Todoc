@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.runner.AndroidJUnit4;
 
-import com.cleanup.todoc.ui.ViewModelFactory;
+import com.cleanup.todoc.injections.ViewModelFactory;
 import com.cleanup.todoc.ui.list.MainViewModel;
 
 import org.junit.Test;
@@ -17,19 +17,16 @@ import static junit.framework.TestCase.assertNotNull;
 public class VMFactoryTest {
 
     @Test
-    public void check_if_vm_factory_generate_vm_instance() {
+    public void myVMFactory_generateVMInstance() {
+        // Given : Create VMFactory instance with application context
         Context context = ApplicationProvider.getApplicationContext();
-
-        // Create VMFactory instance with application context
         ViewModelFactory factory = new ViewModelFactory(context);
 
-        // Check if factory instance is created successfully
+        // When : Check if factory instance is created successfully & create VM instance with factory
         assertNotNull(factory);
-
-        // Create VM instance with factory
         MainViewModel viewModel = factory.create(MainViewModel.class);
 
-        // Check if VM instance is created successfully
+        // Then : Check if VM instance is created successfully
         assertNotNull(viewModel);
     }
 }

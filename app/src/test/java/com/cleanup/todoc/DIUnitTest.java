@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.cleanup.todoc.data.model.Project;
-import com.cleanup.todoc.di.Injection;
+import com.cleanup.todoc.injections.DI;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(JUnit4.class)
-public class InjectionUnitTest {
+public class DIUnitTest {
 
     @Mock
     private Context mockContext;
@@ -27,17 +27,17 @@ public class InjectionUnitTest {
     private Resources mockResources;
 
     /**
-     * Checks if Injection class provides Executor correctly
+     * Checks if DI class provides Executor correctly
      */
     @Test
     public void test_injection_return_executor() {
-        Executor executor = Injection.provideExecutor();
+        Executor executor = DI.provideExecutor();
         assertNotNull(executor);
     }
 
     /**
-     *  - Defines mock Context and Resources objects needed to call Injection method
-     *  - Call Injection method providing a Project[] object
+     *  - Defines mock Context and Resources objects needed to call DI method
+     *  - Call DI method providing a Project[] object
      *  - Checks size of Project[]
      *  - Check each item of Project[]
      */
@@ -58,7 +58,7 @@ public class InjectionUnitTest {
         Mockito.when(mockResources.getString(R.string.project_circus)).thenReturn("Project Circus");
 
         // Get projects from dependency injector
-        Project[] projects = Injection.provideProjects(mockContext);
+        Project[] projects = DI.provideProjects(mockContext);
         assertNotNull(projects);
         assertEquals(3, projects.length);
 
