@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
     /**
      * The adapter which handles the list of tasks
      */
-    private final TasksAdapter adapter = new TasksAdapter(tasks, projects, this);
+    private TasksAdapter adapter;
     /**
      * ViewModel
      */
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
         // RecyclerView initialization
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        adapter = new TasksAdapter(tasks, projects, this);
         listTasks.setAdapter(adapter);
 
         // Observe tasks then update UI & main list
