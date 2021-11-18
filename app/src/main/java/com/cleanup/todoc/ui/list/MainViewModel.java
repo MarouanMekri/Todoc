@@ -1,7 +1,6 @@
 package com.cleanup.todoc.ui.list;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.cleanup.todoc.data.model.Project;
@@ -22,26 +21,23 @@ public class MainViewModel extends ViewModel {
      */
     private final TaskRepository taskRepository;
     /**
-     * Repository to access ProjectDao interface methods
-     */
-    private final ProjectRepository projectRepository;
-    /**
      * Executor to access Database in another thread than UI thread
      */
     private final Executor executor;
     /**
      * LiveData containing the list of existing Tasks
      */
-    private LiveData<List<Task>> tasks = new MutableLiveData<>();
+    private final LiveData<List<Task>> tasks;
     /**
      * LiveData containing the list of existing Projects
      */
-    private LiveData<List<Project>> projects = new MutableLiveData<>();
+    private final LiveData<List<Project>> projects;
 
     public MainViewModel(final TaskRepository taskRepository, final ProjectRepository projectRepository, final Executor executor) {
         this.taskRepository = taskRepository;
-        this.projectRepository = projectRepository;
         this.executor = executor;
+        tasks = taskRepository.getAllTasks();
+        projects = projectRepository.getAllProjects();
     }
 
     /**
@@ -50,11 +46,6 @@ public class MainViewModel extends ViewModel {
      * @return tasks : Tasks LiveData
      */
     public LiveData<List<Task>> getTasks() {
-        if (tasks == null) {
-            tasks = new MutableLiveData<>();
-        } else {
-            tasks = taskRepository.getAllTasks();
-        }
         return tasks;
     }
 
@@ -64,11 +55,6 @@ public class MainViewModel extends ViewModel {
      * @return tasks : Projects LiveData
      */
     public LiveData<List<Project>> getProjects() {
-        if (projects == null) {
-            projects = new MutableLiveData<>();
-        } else {
-            projects = projectRepository.getAllProjects();
-        }
         return projects;
     }
 

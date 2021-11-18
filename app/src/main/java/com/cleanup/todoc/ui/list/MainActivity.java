@@ -26,21 +26,10 @@ import com.cleanup.todoc.data.model.Task;
 import com.cleanup.todoc.injections.ViewModelFactory;
 import com.cleanup.todoc.ui.utils.SortMethod;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DeleteTaskListener {
-    /**
-     * List of all current projects of the application
-     */
-    @NonNull
-    private final List<Project> projects = new ArrayList<>();
-    /**
-     * List of all current tasks of the application
-     */
-    @NonNull
-    private final List<Task> tasks = new ArrayList<>();
+
     /**
      * The adapter which handles the list of tasks
      */
@@ -78,22 +67,14 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
 
         // RecyclerView initialization
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new TasksAdapter(tasks, projects, this);
+        adapter = new TasksAdapter(viewModel.getTasks().getValue(), viewModel.getProjects().getValue(), this);
         listTasks.setAdapter(adapter);
 
-        // Observe tasks then update UI & main list
-        viewModel.getTasks().observe(this, list -> {
-            tasks.clear();
-            tasks.addAll(list);
-            updateTasks();
-        });
+        // Observe tasks then update UI
+        viewModel.getTasks().observe(this, list -> updateTasks());
 
         // Observe projects then update main list
-        viewModel.getProjects().observe(this, list -> {
-            projects.clear();
-            projects.addAll(list);
-            adapter.updateProjects(projects);
-        });
+        viewModel.getProjects().observe(this, list -> adapter.updateProjects(list));
 
         // Add task button
         findViewById(R.id.fab_add_task).setOnClickListener(view -> showAddTaskDialog());
@@ -194,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      */
     private void updateTasks() {
         // Show background image and message
-        if (tasks.size() == 0) {
+        if (viewModel.getTasks().getValue().size() == 0) {
             lblNoTasks.setVisibility(View.VISIBLE);
             listTasks.setVisibility(View.GONE);
         } else {
@@ -202,10 +183,10 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
             lblNoTasks.setVisibility(View.GONE);
             listTasks.setVisibility(View.VISIBLE);
             // Sort tasks
-            viewModel.taskSort(sortMethod, tasks);
+            viewModel.taskSort(sortMethod, viewModel.getTasks().getValue());
         }
         // Update adapter with latest tasks list
-        adapter.updateTasks(tasks);
+        adapter.updateTasks(viewModel.getTasks().getValue());
     }
 
     /**
@@ -237,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements DeleteTaskListene
      * <p>Sets the data of the Spinner with projects to associate to a new task</p>
      */
     private void populateDialogSpinner() {
-        final ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, projects);
+        final ArrayAdapter<Project> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, viewModel.getProjects().getValue());
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dialogSpinner.setAdapter(arrayAdapter);
     }
