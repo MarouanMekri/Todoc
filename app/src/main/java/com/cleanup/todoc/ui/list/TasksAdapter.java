@@ -160,16 +160,10 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
          * @return : Associated Project
          */
         private Project getAssociatedProject(long projectId) {
-            boolean found = false;
-            int index = 0;
             Project project = null;
-
-            while (!found && index < projects.size()) {
-                if (projects.get(index).getId() == projectId) {
-                    found = true;
-                    project = projects.get(index);
-                } else {
-                    index++;
+            for (int i = 0; i < projects.size(); i++) {
+                if (projects.get(i).getId() == projectId) {
+                    project = projects.get(i);
                 }
             }
             return project;
