@@ -131,8 +131,7 @@ public class UITest {
                 .check(withItemCount(2));
     }
 
-    @Test
-    public void myTasksList_createTasks_thenSort() {
+    public void myTasksList_createTasks_thenSortAlphabetical() {
         // Given : Create 3 tasks
         onView(withId(R.id.fab_add_task))
                 .perform(click());
@@ -155,36 +154,111 @@ public class UITest {
 
         // When : Perform menu button
         onView(withId(R.id.action_filter)).perform(click());
-
-        // Then : Sort alphabetical & alphabetical inverted & old first & recent first
         onView(withText(R.string.sort_alphabetical)).perform(click());
+
+        // Then : Sort alphabetical
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(1, R.id.lbl_task_name))
                 .check(matches(withText("hhh Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("zzz Tâche example")));
+    }
 
+    public void myTasksList_createTasks_thenSortAlphabeticalInverted() {
+        // Given : Create 3 tasks
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("aaa Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("zzz Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("hhh Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+
+        // When : Perform menu button
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_alphabetical_invert)).perform(click());
+
+        // Then : Sort Alphabetical inverted
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
                 .check(matches(withText("zzz Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(1, R.id.lbl_task_name))
                 .check(matches(withText("hhh Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
+    }
 
+    public void myTasksList_createTasks_thenSortOldFirst() {
+        // Given : Create 3 tasks
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("aaa Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("zzz Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("hhh Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+
+        // When : Perform menu button
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_oldest_first)).perform(click());
+
+        // Then : Sort Old first
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
                 .check(matches(withText("aaa Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(1, R.id.lbl_task_name))
                 .check(matches(withText("zzz Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(2, R.id.lbl_task_name))
                 .check(matches(withText("hhh Tâche example")));
+    }
 
+    public void myTasksList_createTasks_thenSortRecentFirst() {
+        // Given : Create 3 tasks
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("aaa Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("zzz Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+        onView(withId(R.id.fab_add_task))
+                .perform(click());
+        onView(withId(R.id.txt_task_name))
+                .perform(replaceText("hhh Tâche example"));
+        onView(withText("Ajouter"))
+                .perform(click());
+
+        // When : Perform menu button
         onView(withId(R.id.action_filter)).perform(click());
         onView(withText(R.string.sort_recent_first)).perform(click());
+
+        // Then : Sort Recent first
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(0, R.id.lbl_task_name))
                 .check(matches(withText("hhh Tâche example")));
         onView(withRecyclerView(R.id.list_tasks).atPositionOnView(1, R.id.lbl_task_name))
