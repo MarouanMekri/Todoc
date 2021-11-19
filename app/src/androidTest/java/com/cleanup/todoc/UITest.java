@@ -131,6 +131,7 @@ public class UITest {
                 .check(withItemCount(2));
     }
 
+    @Test
     public void myTasksList_createTasks_thenSortAlphabetical() {
         // Given : Create 3 tasks
         onView(withId(R.id.fab_add_task))
@@ -165,6 +166,7 @@ public class UITest {
                 .check(matches(withText("zzz Tâche example")));
     }
 
+    @Test
     public void myTasksList_createTasks_thenSortAlphabeticalInverted() {
         // Given : Create 3 tasks
         onView(withId(R.id.fab_add_task))
@@ -199,6 +201,7 @@ public class UITest {
                 .check(matches(withText("aaa Tâche example")));
     }
 
+    @Test
     public void myTasksList_createTasks_thenSortOldFirst() {
         // Given : Create 3 tasks
         onView(withId(R.id.fab_add_task))
@@ -233,6 +236,7 @@ public class UITest {
                 .check(matches(withText("hhh Tâche example")));
     }
 
+    @Test
     public void myTasksList_createTasks_thenSortRecentFirst() {
         // Given : Create 3 tasks
         onView(withId(R.id.fab_add_task))
