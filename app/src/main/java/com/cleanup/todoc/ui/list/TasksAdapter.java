@@ -33,7 +33,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     /**
      * The list of projects the adapter deals with
      */
-    @NonNull
+    @Nullable
     private List<Project> projects;
 
     /**
@@ -43,7 +43,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      * @param projects           the list of projects the adapter deals with to set
      * @param deleteTaskListener the listener who delete task
      */
-    public TasksAdapter(@Nullable final List<Task> tasks, @NonNull final List<Project> projects, @NonNull final DeleteTaskListener deleteTaskListener) {
+    public TasksAdapter(@Nullable final List<Task> tasks, @Nullable final List<Project> projects, @NonNull final DeleteTaskListener deleteTaskListener) {
         this.tasks = tasks;
         this.projects = projects;
         this.deleteTaskListener = deleteTaskListener;
@@ -83,7 +83,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return tasks == null ? 0 : tasks.size();
     }
 
     /**
